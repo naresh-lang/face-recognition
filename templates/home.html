@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<title>Face Detection</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+.w3-row-padding img {margin-bottom: 12px}
+/* Set the width of the sidebar to 120px */
+.w3-sidebar {width: 120px;background: #222;}
+/* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
+#main {margin-left: 120px}
+/* Remove margins from "page content" on small screens */
+@media only screen and (max-width: 600px) {#main {margin-left: 0}}
+</style>
+<body class="w3-black">
+
+
+
+<!-- Icon Bar (Sidebar - hidden on small screens) -->
+<nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center">
+  <!-- Avatar image in top left corner -->
+  {% load static %}
+<img src="{% static "images/home.png" %}" style="width:100%">
+ <!-- <img src="home.png" style="width:100%"> -->
+  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-black">
+    <i class="fa fa-home w3-xxlarge"></i>
+    <p>HOME</p>
+  </a>
+  <a href="#about" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-user w3-xxlarge"></i>
+    <p>ABOUT</p>
+  </a>
+  <a href="#photos" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-eye w3-xxlarge"></i>
+    <p>PHOTOS</p>
+  </a>
+  <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-envelope w3-xxlarge"></i>
+    <p>CONTACT</p>
+  </a>
+</nav>
+
+<!-- Navbar on small screens (Hidden on medium and large screens) -->
+<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+  <div class="w3-bar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
+    <a href="#" class="w3-bar-item w3-button" style="width:25% !important">HOME</a>
+    <a href="#about" class="w3-bar-item w3-button" style="width:25% !important">ABOUT</a>
+    <a href="#photos" class="w3-bar-item w3-button" style="width:25% !important">PHOTOS</a>
+    <a href="#contact" class="w3-bar-item w3-button" style="width:25% !important">CONTACT</a>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div class="w3-padding-large" id="main">
+  <!-- Header/Home -->
+  <header class="w3-container w3-padding-32 w3-center w3-black" id="home">
+    <h1 class="w3-jumbo"><span class="w3-hide-small">Face</span> Detection</h1>
+       <style>
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat-Regular'), url(http://themes.googleusercontent.com/static/fonts/montserrat/v4/zhcz-_WihjSQC0oHJ9TCYBsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
+}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}body{line-height:1;}ol,ul{list-style:none;}blockquote,q{quotes:none;}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}table{border-collapse:collapse;border-spacing:0;}body,html{height:100%;}body{color:#fff;margin:0 auto;font:1em/1.3em Montserrat,Helvetica,sans-serif;}.clearfix{clear:both;}.container{ background: url(https://pcbx.us/bexy.jpg);padding-top:20px;height:200%;width:100%;text-align:center;background-color:#ddd;}h1{margin:40px 0;font-size:40px;line-height:40px;font-weight:bold;text-shadow:0px 1px 1px #888;}a{text-decoration:none;color:#fff;margin:0 10px;}.btn{box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;position:relative;display:inline-block;overflow:hidden;height:53px;border-radius:6px;-moz-border-radius:6px;-webkit-border-radius:6px;line-height:30px;font-size:16px;font-weight:bold;text-shadow:0px 1px 1px #888;}.btn span.icon,.btn span.title{display:block;position:relative;line-height:50px;padding:0 30px;border-radius:6px;-moz-border-radius:6px;-webkit-border-radius:6px;}.btn span.left{float:left;border-radius:6px 0 0 6px;-moz-border-radius:6px 0 0 6px;-webkit-border-radius:6px 0 0 6px;}.btn span.right{float:right;border-radius:0 6px 6px 0;-moz-border-radius:0 6px 6px 0;-webkit-border-radius:0 6px 6px 0;}.btn span.icon{font-size:23px;background-color:#0e252f;-webkit-box-shadow:0 3px 0 0 #0e252f;box-shadow:0 3px 0 0 #0e252f;text-shadow:0px 1px 1px #888;}.btn span.title{-webkit-box-shadow:0 3px 0 0 #00ae94;box-shadow:0 3px 0 0 #888;background-color:#888;}.btn span.arrow-left,.btn span.arrow-right{position:absolute;width:0;height:0;border-top:25px solid transparent;border-bottom:25px solid transparent;-webkit-transition:all .15s;-transition:all .15s;-webkit-transition-property:left,right;transition-property:left,right;}.btn.left span.arrow-left{right:0;-webkit-box-shadow:10px 0 0 0 #888,10px 3px 0 0 #888;box-shadow:10px 0 0 0 #888,10px 3px 0 0 #888;border-right:10px solid #888;}.btn.right span.arrow-left{right:0;-webkit-box-shadow:10px 0 0 0 #0e252f,10px 3px 0 0 #0e252f;box-shadow:10px 0 0 0 #0e252f,10px 3px 0 0 #0e252f;border-right:10px solid #0e252f;}.btn.left span.arrow-right{left:0;-webkit-box-shadow:-10px 0 0 0 #0e252f,-10px 3px 0 0 #0e252f;box-shadow:-10px 0 0 0 #0e252f,-10px 3px 0 0 #0e252f;border-left:10px solid #0e252f;}.btn.right span.arrow-right{left:0;-webkit-box-shadow:-10px 0 0 0 #888;,-10px 3px 0 0 #888;box-shadow:-10px 0 0 0 #888,-10px 3px 0 0 #888;border-left:10px solid #888;}.btn span.slant-left,.btn span.slant-right{position:absolute;width:0;height:0;border-top:0 solid transparent;border-bottom:50px solid transparent;-webkit-transition:all .15s;-transition:all .15s;-webkit-transition-property:left,right;transition-property:left,right;}.btn.left span.slant-right{left:0;-webkit-box-shadow:-10px 0 0 0 #0e252f,-10px 3px 0 0 #0e252f;box-shadow:-10px 0 0 0 #0e252f,-10px 3px 0 0 #0e252f;border-left:10px solid #0e252f;}.btn.right span.slant-right{left:0;-webkit-box-shadow:-10px 0 0 0 #888,-10px 3px 0 0 #888;box-shadow:-10px 0 0 0 #888,-10px 3px 0 0 #888;border-left:10px solid #888;}.btn.left span.slant-left{right:0;-webkit-box-shadow:10px 0 0 0 #888,10px 3px 0 0 #888;box-shadow:10px 0 0 0 #888,10px 3px 0 0 #888;border-right:10px solid #888;}.btn.right span.slant-left{right:0;-webkit-box-shadow:10px 0 0 0 #00967f,10px 3px 0 0 #0e252f;box-shadow:10px 0 0 0 #0e252f,10px 3px 0 0 #0e252f;border-right:10px solid #0e252f;}.btn:active,.btn.active{height:51px;}.btn:hover{}.btn:hover span.arrow-left{right:10px;}.btn:hover span.arrow-right{left:10px;}.btn:hover span.slant-left{right:10px;}.btn:hover span.slant-right{left:10px;}.btn-small{height:30px;font-size:12px;line-height:10px;}a.btn-small span.btn{height:30px;}
+   
+      </style>
+
+      <br>
+    <div class="content">
+      <a href="/reg" class="btn left">
+        <span class="left icon icon-gear"></span>
+        <span class="right title"><span class="arrow-right"></span>Register</span>
+      </a>
+
+      <a href="/check" class="btn right">
+        <span class="left title"><span class="arrow-left"></span>Check Person</span>
+        <span class="right icon icon-gear"></span>
+      </a>
+    </div>
+
+    
+  </header>
+
+  <!-- About Section -->
+  <div class="w3-content w3-justify w3-text-grey w3-padding-64" id="about">
+    <h2 class="w3-text-light-grey">About Project</h2>
+    <hr style="width:200px" class="w3-opacity">
+    <p>Computer Vision, often abbreviated as CV, is defined as a field of study that seeks to develop techniques to help computers “see” and understand the content of digital images such as photographs and videos.
+
+     The problem of computer vision appears simple because it is trivially solved by people, even very young children. Nevertheless, it largely remains an unsolved problem based both on the limited understanding of biological vision and because of the complexity of vision perception in a dynamic and nearly infinitely varying physical world.
+    </p>
+    <h3 class="w3-padding-16 w3-text-light-grey">Skills Used</h3>
+    <p class="w3-wide">Computer Vision</p>
+    <div class="w3-white">
+      <div class="w3-dark-grey" style="height:28px;width:95%"></div>
+    </div>
+    <p class="w3-wide">Python</p>
+    <div class="w3-white">
+      <div class="w3-dark-grey" style="height:28px;width:85%"></div>
+    </div>
+    <p class="w3-wide">Django</p>
+    <div class="w3-white">
+      <div class="w3-dark-grey" style="height:28px;width:80%"></div>
+    </div><br>
+    
+    <div class="w3-row w3-center w3-padding-16 w3-section w3-light-grey">
+      <div class="w3-quarter w3-section">
+        <span class="w3-xlarge">55%</span><br>
+        Deep Learning
+      </div>
+      <div class="w3-quarter w3-section">
+        <span class="w3-xlarge">30%</span><br>
+        Python
+      </div>
+      <div class="w3-quarter w3-section">
+        <span class="w3-xlarge">10%</span><br>
+        Django
+      </div>
+      <div class="w3-quarter w3-section">
+        <span class="w3-xlarge">5%</span><br>
+        Pyspark
+      </div>
+    </div>
+
+    <button class="w3-button w3-light-grey w3-padding-large w3-section">
+      <i class="fa fa-download"></i> Download PDF
+    </button>
+    
+    <!-- Grid for pricing tables -->
+    <h3 class="w3-padding-16 w3-text-light-grey">Face Detection Price</h3>
+    <div class="w3-row-padding" style="margin:0 -16px">
+      <div class="w3-half w3-margin-bottom">
+        <ul class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off">
+          <li class="w3-dark-grey w3-xlarge w3-padding-32">Basic</li>
+          <li class="w3-padding-16">Web Design</li>
+          <li class="w3-padding-16">Photo Storage</li>
+          <li class="w3-padding-16">5GB Storage</li>
+          <li class="w3-padding-16">Mail Support</li>
+          <li class="w3-padding-16">
+            <h2>$ 10</h2>
+            <span class="w3-opacity">per month</span>
+          </li>
+          <li class="w3-light-grey w3-padding-24">
+            <button class="w3-button w3-white w3-padding-large w3-hover-black">Sign Up</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="w3-half">
+        <ul class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off">
+          <li class="w3-dark-grey w3-xlarge w3-padding-32">Pro</li>
+          <li class="w3-padding-16">Web Design</li>
+          <li class="w3-padding-16">Photo Storage</li>
+          <li class="w3-padding-16">50GB Storage</li>
+          <li class="w3-padding-16">Endless Support</li>
+          <li class="w3-padding-16">
+            <h2>$ 25</h2>
+            <span class="w3-opacity">per month</span>
+          </li>
+          <li class="w3-light-grey w3-padding-24">
+            <button class="w3-button w3-white w3-padding-large w3-hover-black">Sign Up</button>
+          </li>
+        </ul>
+      </div>
+    <!-- End Grid/Pricing tables -->
+    </div>
+    
+  <!-- End About Section -->
+  </div>
+  
+  <!-- Portfolio Section -->
+  <div class="w3-padding-64 w3-content" id="photos">
+    <h2 class="w3-text-light-grey">My Photos</h2>
+    <hr style="width:200px" class="w3-opacity">
+
+    <!-- Grid for photos -->
+    <div class="w3-row-padding" style="margin:0 -16px">
+      <div class="w3-half">
+        <img src="{% static "images/charan.jpg" %}" style="width:100%">
+        <img src="{% static "images/mia.jpeg" %}" style="width:100%">
+        <img src="{% static "images/PawanKalyan.jpg" %}" style="width:100%">
+        <img src="{% static "images/Michael-Jackson.jpg" %}" style="width:100%">
+      </div>
+
+      <div class="w3-half">
+        <img src="{% static "images/justin.jpg" %}" style="width:100%">
+        <img src="{% static "images/d.jpg" %}" style="width:100%">
+        <img src="{% static "images/edd.jpg" %}" style="width:100%">
+        <img src="{% static "images/billie.jpg" %}" style="width:100%">
+        
+      </div>
+    <!-- End photo grid -->
+    </div>
+  <!-- End Portfolio Section -->
+  </div>
+
+  <!-- Contact Section -->
+  <div class="w3-padding-64 w3-content w3-text-grey" id="contact">
+    <h2 class="w3-text-light-grey">Contact</h2>
+    <hr style="width:200px" class="w3-opacity">
+
+    <div class="w3-section">
+      <p><i class="fa fa-map-marker fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Hyderabad, IN</p>
+      <p><i class="fa fa-phone fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Phone: +91 9876543210</p>
+      <p><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"> </i> Email: navyadubbakula5@gmail.com</p>
+    </div><br>
+    <p>Lets get in touch. Send me a message:</p>
+    <br>
+
+    <form action="/action_page.php" target="_blank">
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
+      <br>
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Email" required name="Email"></p>
+      <br>
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Subject" required name="Subject"></p>
+      <br>
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Message" required name="Message"></p>
+      <br>
+      <p>
+        <button class="w3-button w3-light-grey w3-padding-large" type="submit">
+          <i class="fa fa-paper-plane"></i> SEND MESSAGE
+        </button>
+      </p>
+    </form>
+  <!-- End Contact Section -->
+  </div>
+  
+  
+
+<!-- END PAGE CONTENT -->
+</div>
+
+</body>
+</html>
